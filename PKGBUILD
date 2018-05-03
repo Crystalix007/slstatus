@@ -33,12 +33,13 @@ prepare(){
 
 	if [ -d "$srcdir/components" ]; then
 		rm -rf $srcdir/components
-		mkdir $srcdir/components
-	
-		for filename in $startdir/components/*; do
-			ln -s $filename $srcdir/components/
-		done
 	fi
+	mkdir $srcdir/components
+	
+	for filename in $startdir/components/*; do
+		ln -s $filename $srcdir/components/
+	done
+	
 }
 
 build() {
