@@ -28,8 +28,17 @@ source=("arg.h"
 	"README")
 
 prepare(){
-	ln -s $startdir/components/ $srcdir/
+	echo $DLAGENTS
 	make clean
+
+	if [ -d "$srcdir/components" ]; then
+		rm -rf $srcdir/components
+		mkdir $srcdir/components
+	
+		for filename in $startdir/components/*; do
+			ln -s $filename $srcdir/components/
+		done
+	fi
 }
 
 build() {
