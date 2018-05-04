@@ -20,11 +20,12 @@
 	cpu_perc(void)
 	{
 		int perc;
-		static long double a[7];
+		static long double a[7] = {0};
 		static int valid;
 		long double b[7];
 
 		memcpy(b, a, sizeof(b));
+		//Format user, nice, system, idle, iowait, irq, softirq
 		if (pscanf("/proc/stat", "%*s %Lf %Lf %Lf %Lf %Lf %Lf %Lf",
 		           &a[0], &a[1], &a[2], &a[3], &a[4], &a[5], &a[6]) != 7) {
 			return NULL;
@@ -34,13 +35,25 @@
 			return NULL;
 		}
 
-		perc = 100 *
-		       ((b[0]+b[1]+b[2]+b[5]+b[6]) -
-		        (a[0]+a[1]+a[2]+a[5]+a[6])) /
-		       ((b[0]+b[1]+b[2]+b[3]+b[4]+b[5]+b[6]) -
-		        (a[0]+a[1]+a[2]+a[3]+a[4]+a[5]+a[6]));
+		long double usedCPU1 = (a[0] + a[1] + a[2] + a[5] + a[6]);
+		long double usedCPU2 = (b[0] + b[1] + b[2] + b[5] + b[6]);
+		long double usedCPUDelta = usedCPU1 - usedCPU2;
 
-		return bprintf("%d", perc);
+		long double totalCPU1 = 0;
+		long double totalCPU2 = 0;
+
+		for (unsigned char i = 0; i < 7; i++)
+		{
+			totalCPU1 += a[i];
+			totalCPU2 += b[i];
+		}
+
+		long double totalCPUDelta = totalCPU1 - totalCPU2;
+
+		perc = 10000.0 * (usedCPUDelta / totalCPUDelta);
+		
+
+		return bprintf("%.3g", (perc / 100.f));
 	}
 
 	const char *
