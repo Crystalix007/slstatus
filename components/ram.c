@@ -24,7 +24,7 @@
 		               "MemAvailable: %ld kB\nBuffers: %ld kB\n"
 		               "Cached: %ld kB\n",
 		               &total, &free, &buffers, &buffers, &cached) == 5) ?
-		       bprintf("%d", 100 * ((total - free) - (buffers + cached)) /
+		       bprintf("%*d", 3, 100 * ((total - free) - (buffers + cached)) /
 		               total) :
 		       NULL;
 	}

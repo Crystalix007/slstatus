@@ -53,7 +53,7 @@
 		perc = 10000.0 * (usedCPUDelta / totalCPUDelta);
 		
 
-		return bprintf("%.3g", (perc / 100.f));
+		return bprintf("%*.3g", 4, (perc / 100.f));
 	}
 
 	const char *
